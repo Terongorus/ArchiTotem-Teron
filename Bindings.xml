@@ -27,4 +27,11 @@
 		ArchiTotemCastedButton = "ArchiTotemButton_Air1"
 		CastSpellByName(ArchiTotem_TotemData["ArchiTotemButton_Air1"].name)
 	</Binding>
+	<Binding name="CAST_TOTEMIC_RECALL">
+		ArchiTotemCasted = 1
+		ArchiTotemCastedTotem = ArchiTotem_TotemData["ArchiTotemButton_Totemic1"]
+		ArchiTotemCastedElement = "Totemic"
+		ArchiTotemCastedButton = "ArchiTotemButton_Totemic1"
+		CastSpellByName(ArchiTotem_TotemData["ArchiTotemButton_Totemic1"].name)
+	</Binding>
 </Bindings>
