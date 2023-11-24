@@ -179,6 +179,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<Button name="ArchiTotemButton_Air5" inherits="ArchiTotem_ButtonTemplate" hidden="true"/>
 			<Button name="ArchiTotemButton_Air6" inherits="ArchiTotem_ButtonTemplate" hidden="true"/>
 			<Button name="ArchiTotemButton_Air7" inherits="ArchiTotem_ButtonTemplate" hidden="true"/>
+			
+			<!--					RECALL  -->
+			<Button name="ArchiTotemButton_Totemic1" inherits="ArchiTotem_ButtonTemplate" hidden="false"/>
 		</Frames>
 	</Frame>
 </Ui>
