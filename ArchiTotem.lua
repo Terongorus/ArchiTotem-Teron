@@ -523,7 +523,6 @@ function ArchiTotem_UpdateTextures()
 		local threeLetterElement = string.sub(v, 1, 3)
 		-- Get the 3 first letters of the element
 		for i = 1, ArchiTotem_Options[threeLetterElement].max do
-			ArchiTotem_Print("ArchiTotemButton_" .. v .. i .. "Texture")
 			-- For all buttons of that element
 			_G["ArchiTotemButton_" .. v .. i .. "Texture"]:SetTexture(ArchiTotem_TotemData["ArchiTotemButton_" .. v .. i].icon)
 			-- Set the texture
