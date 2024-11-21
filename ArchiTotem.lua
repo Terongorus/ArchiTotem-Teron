@@ -26,7 +26,6 @@ local ArchiTotemPopout = {
     "ArchiTotemButton_Water3",
     "ArchiTotemButton_Water4",
     "ArchiTotemButton_Water5",
-    "ArchiTotemButton_Water6",
     "ArchiTotemButton_Air2",
     "ArchiTotemButton_Air3",
     "ArchiTotemButton_Air4",
@@ -48,7 +47,7 @@ if not ArchiTotem_Options then
     ArchiTotem_Options["Fir"].shown = 1
 
     ArchiTotem_Options["Wat"] = {}
-    ArchiTotem_Options["Wat"].max = 6
+    ArchiTotem_Options["Wat"].max = 5
     ArchiTotem_Options["Wat"].shown = 1
 
     ArchiTotem_Options["Air"] = {}
@@ -171,44 +170,36 @@ if not ArchiTotem_TotemData then
     ArchiTotem_TotemData["ArchiTotemButton_Water1"].casted = nil
 
     ArchiTotem_TotemData["ArchiTotemButton_Water2"] = {}
-    ArchiTotem_TotemData["ArchiTotemButton_Water2"].icon = "Interface\\Icons\\Spell_Frost_SummonWaterElemental"
-    ArchiTotem_TotemData["ArchiTotemButton_Water2"].name = "Mana Tide Totem"
-    ArchiTotem_TotemData["ArchiTotemButton_Water2"].duration = 12
-    ArchiTotem_TotemData["ArchiTotemButton_Water2"].cooldown = 300
+    ArchiTotem_TotemData["ArchiTotemButton_Water2"].icon = "Interface\\Icons\\Spell_FireResistanceTotem_01"
+    ArchiTotem_TotemData["ArchiTotemButton_Water2"].name = "Fire Resistance Totem"
+    ArchiTotem_TotemData["ArchiTotemButton_Water2"].duration = 120
+    ArchiTotem_TotemData["ArchiTotemButton_Water2"].cooldown = 0
     ArchiTotem_TotemData["ArchiTotemButton_Water2"].cooldownstarted = nil
     ArchiTotem_TotemData["ArchiTotemButton_Water2"].casted = nil
 
     ArchiTotem_TotemData["ArchiTotemButton_Water3"] = {}
-    ArchiTotem_TotemData["ArchiTotemButton_Water3"].icon = "Interface\\Icons\\Spell_FireResistanceTotem_01"
-    ArchiTotem_TotemData["ArchiTotemButton_Water3"].name = "Fire Resistance Totem"
+    ArchiTotem_TotemData["ArchiTotemButton_Water3"].icon = "Interface\\Icons\\Spell_Nature_PoisonCleansingTotem"
+    ArchiTotem_TotemData["ArchiTotemButton_Water3"].name = "Poison Cleansing Totem"
     ArchiTotem_TotemData["ArchiTotemButton_Water3"].duration = 120
     ArchiTotem_TotemData["ArchiTotemButton_Water3"].cooldown = 0
     ArchiTotem_TotemData["ArchiTotemButton_Water3"].cooldownstarted = nil
     ArchiTotem_TotemData["ArchiTotemButton_Water3"].casted = nil
 
     ArchiTotem_TotemData["ArchiTotemButton_Water4"] = {}
-    ArchiTotem_TotemData["ArchiTotemButton_Water4"].icon = "Interface\\Icons\\Spell_Nature_PoisonCleansingTotem"
-    ArchiTotem_TotemData["ArchiTotemButton_Water4"].name = "Poison Cleansing Totem"
+    ArchiTotem_TotemData["ArchiTotemButton_Water4"].icon = "Interface\\Icons\\Spell_Nature_DiseaseCleansingTotem"
+    ArchiTotem_TotemData["ArchiTotemButton_Water4"].name = "Disease Cleansing Totem"
     ArchiTotem_TotemData["ArchiTotemButton_Water4"].duration = 120
     ArchiTotem_TotemData["ArchiTotemButton_Water4"].cooldown = 0
     ArchiTotem_TotemData["ArchiTotemButton_Water4"].cooldownstarted = nil
     ArchiTotem_TotemData["ArchiTotemButton_Water4"].casted = nil
 
     ArchiTotem_TotemData["ArchiTotemButton_Water5"] = {}
-    ArchiTotem_TotemData["ArchiTotemButton_Water5"].icon = "Interface\\Icons\\Spell_Nature_DiseaseCleansingTotem"
-    ArchiTotem_TotemData["ArchiTotemButton_Water5"].name = "Disease Cleansing Totem"
-    ArchiTotem_TotemData["ArchiTotemButton_Water5"].duration = 120
+    ArchiTotem_TotemData["ArchiTotemButton_Water5"].icon = "Interface\\Icons\\INV_Spear_04"
+    ArchiTotem_TotemData["ArchiTotemButton_Water5"].name = "Healing Stream Totem"
+    ArchiTotem_TotemData["ArchiTotemButton_Water5"].duration = 60
     ArchiTotem_TotemData["ArchiTotemButton_Water5"].cooldown = 0
     ArchiTotem_TotemData["ArchiTotemButton_Water5"].cooldownstarted = nil
     ArchiTotem_TotemData["ArchiTotemButton_Water5"].casted = nil
-
-    ArchiTotem_TotemData["ArchiTotemButton_Water6"] = {}
-    ArchiTotem_TotemData["ArchiTotemButton_Water6"].icon = "Interface\\Icons\\INV_Spear_04"
-    ArchiTotem_TotemData["ArchiTotemButton_Water6"].name = "Healing Stream Totem"
-    ArchiTotem_TotemData["ArchiTotemButton_Water6"].duration = 60
-    ArchiTotem_TotemData["ArchiTotemButton_Water6"].cooldown = 0
-    ArchiTotem_TotemData["ArchiTotemButton_Water6"].cooldownstarted = nil
-    ArchiTotem_TotemData["ArchiTotemButton_Water6"].casted = nil
 
 
     ArchiTotem_TotemData["ArchiTotemButton_Air1"] = {}
@@ -309,7 +300,7 @@ function ArchiTotem_OnLoad()
         -- A shortcut or alias
         SlashCmdList["ARCHITOTEM"] = ArchiTotem_Command
         DEFAULT_CHAT_FRAME:AddMessage("|CFF20B2AAArchiTotem|r " ..
-        author .. " " .. L["ver."] .. " " .. version .. " " .. L["loaded"] .. ".")
+            author .. " " .. L["ver."] .. " " .. version .. " " .. L["loaded"] .. ".")
     else
         this:UnregisterAllEvents()
         ArchiTotemFrame:Hide()
@@ -338,7 +329,7 @@ function ArchiTotem_OnEvent(event)
         ArchiTotem_SetDirection(ArchiTotem_Options["Apperance"].direction)
         ArchiTotem_SetScale(ArchiTotem_Options["Apperance"].scale)
         ArchiTotem_Order(ArchiTotem_Options["Order"].first, ArchiTotem_Options["Order"].second,
-            ArchiTotem_Options["Order"].third, ArchiTotem_Options["Order"].forth, ArchiTotem_Options["Order"].fifth)
+            ArchiTotem_Options["Order"].third, ArchiTotem_Options["Order"].forth)
     elseif event == "CHAT_MSG_SPELL_FAILED_LOCALPLAYER" then
         ArchiTotemCasted = 0
     elseif event == "SPELLCAST_STOP" then
@@ -476,12 +467,17 @@ function ArchiTotem_CastTotem()
     ArchiTotemCastedElement = string.sub(this:GetName(), 18, -2)
     ArchiTotemCastedButton = this:GetName()
 
-    if ArchiTotemCastedTotem.casted == nil then ArchiTotemCastedTotem.casted = GetTime() - ArchiTotemCastedTotem
-        .cooldown end
+    if ArchiTotemCastedTotem.casted == nil then
+        ArchiTotemCastedTotem.casted = GetTime() - ArchiTotemCastedTotem
+            .cooldown
+    end
     local mincooldown = ArchiTotemCastedTotem.cooldown
     if mincooldown < 1.5 then mincooldown = 1.5 end
     local localizeSpell = L[ArchiTotem_TotemData[this:GetName()].name]
     CastSpellByName(localizeSpell)
+    if localizeSpell == "Totemic Recall" then
+        ArchiTotem_ClearAllCooldowns()
+    end
     -- If control or alt isn't pressed, cast the totem
 end
 
@@ -494,7 +490,6 @@ function ArchiTotem_Switch(arg1, arg2)
     _G[arg1 .. "CooldownBg"]:Hide()
     _G[arg2 .. "CooldownText"]:Hide()
     _G[arg2 .. "CooldownBg"]:Hide()
-    -- ArchiTotem_Print(ArchiTotem_GetSpellId(ArchiTotem_TotemData[arg1].name))
     if ArchiTotem_GetSpellId(ArchiTotem_TotemData[arg1].name) ~= 0 then
         local _, duration1 = GetSpellCooldown(ArchiTotem_GetSpellId(ArchiTotem_TotemData[arg1].name), BOOKTYPE_SPELL)
         CooldownFrame_SetTimer(_G[arg1 .. "Cooldown"], ArchiTotem_TotemData[arg1].casted, duration1, 1)
@@ -522,7 +517,7 @@ function ArchiTotem_UpdateTextures()
         for i = 1, ArchiTotem_Options[threeLetterElement].max do
             -- For all buttons of that element
             _G["ArchiTotemButton_" .. v .. i .. "Texture"]:SetTexture(ArchiTotem_TotemData
-            ["ArchiTotemButton_" .. v .. i].icon)
+                ["ArchiTotemButton_" .. v .. i].icon)
             -- Set the texture
         end
     end
@@ -593,8 +588,8 @@ function ArchiTotem_SetDirection(dir)
     end
 end
 
-function ArchiTotem_Order(first, second, third, forth, fifth)
-    if first == nil or second == nil or third == nil or forth == nil or fifth == nil then
+function ArchiTotem_Order(first, second, third, forth)
+    if first == nil or second == nil or third == nil or forth == nil then
         return ArchiTotem_Print(L["Elements must be written in english!"] .. " <Earth, Fire, Water, Air>", "error")
     end
     -- Set the order of the totems Earth Fire Water Air.
@@ -603,12 +598,13 @@ function ArchiTotem_Order(first, second, third, forth, fifth)
     secondButton = "ArchiTotemButton_" .. strupper(string.sub(second, 1, 1)) .. string.sub(second, 2) .. "1"
     thirdButton = "ArchiTotemButton_" .. strupper(string.sub(third, 1, 1)) .. string.sub(third, 2) .. "1"
     forthButton = "ArchiTotemButton_" .. strupper(string.sub(forth, 1, 1)) .. string.sub(forth, 2) .. "1"
-    fifthButton = "ArchiTotemButton_" .. strupper(string.sub(fifth, 1, 1)) .. string.sub(fifth, 2) .. "1"
+    fifthButton = "ArchiTotemButton_Totemic1"
+
     ArchiTotem_Options["Order"].first = strupper(string.sub(first, 1, 1)) .. string.sub(first, 2)
     ArchiTotem_Options["Order"].second = strupper(string.sub(second, 1, 1)) .. string.sub(second, 2)
     ArchiTotem_Options["Order"].third = strupper(string.sub(third, 1, 1)) .. string.sub(third, 2)
     ArchiTotem_Options["Order"].forth = strupper(string.sub(forth, 1, 1)) .. string.sub(forth, 2)
-    ArchiTotem_Options["Order"].fifth = strupper(string.sub(fifth, 1, 1)) .. string.sub(fifth, 2)
+    ArchiTotem_Options["Order"].fifth = "ArchiTotemButton_Totemic1"
 
     _G[firstButton]:ClearAllPoints()
     -- Clear all anchors, or the buttons will be messed up
@@ -669,8 +665,12 @@ function ArchiTotem_OnUpdate(arg1)
                 if v.duration > 0 then
                     _G[k .. "DurationText"]:Show()
                 end
-                if seconds < 10 then seconds = string.format("0%.0f", seconds) else seconds = string.format("%.0f",
-                        seconds) end
+                if seconds < 10 then
+                    seconds = string.format("0%.0f", seconds)
+                else
+                    seconds = string.format("%.0f",
+                        seconds)
+                end
                 if v.duration > 0 then
                     _G[k .. "DurationText"]:SetText(minutes .. ":" .. seconds)
                 end
@@ -740,18 +740,10 @@ function ArchiTotem_Command(cmd)
             if tonumber(arg[3]) > 0 and tonumber(arg[3]) <= 7 then
                 ArchiTotem_Options["Air"].shown = tonumber(arg[3])
                 ArchiTotem_UpdateShown()
-                -- ////////////////////////////////////////////////////////////////////
                 ArchiTotem_Print(L["Air totems shown: "] .. arg[3])
             end
-        elseif arg[2] == "tot" then
-            if tonumber(arg[3]) > 0 and tonumber(arg[3]) <= 2 then
-                ArchiTotem_Options["Tot"].shown = tonumber(arg[3])
-                ArchiTotem_UpdateShown()
-                -- ////////////////////////////////////////////////////////////////////
-                ArchiTotem_Print(L["Totemic Recall shown: "] .. arg[3])
-            end
         else
-            ArchiTotem_Print(L["Elements must be written in english!"] .. " <Earth, Fire, Water, Air, Totemic>", "error")
+            ArchiTotem_Print(L["Elements must be written in english!"] .. " <Earth, Fire, Water, Air>", "error")
         end
     elseif arg[1] == "direction" then
         -- /at direction, which direction the totems should go on mouseover
@@ -766,10 +758,10 @@ function ArchiTotem_Command(cmd)
         end
     elseif arg[1] == "order" then
         -- /at order, which order the totems have, left to right
-        ArchiTotem_Order(arg[2], arg[3], arg[4], arg[5], arg[6])
+        ArchiTotem_Order(arg[2], arg[3], arg[4], arg[5])
         if arg[2] and arg[3] and arg[4] and arg[5] and arg[6] then -- check english elements
             ArchiTotem_Print(L["Order set to: "] ..
-            arg[2] .. ", " .. arg[3] .. ", " .. arg[4] .. ", " .. arg[5] .. ", " .. arg[6])
+                arg[2] .. ", " .. arg[3] .. ", " .. arg[4] .. ", " .. arg[5] .. ", " .. arg[6])
         end
     elseif arg[1] == "scale" then
         -- /at scale, what scale the frame has
@@ -839,7 +831,7 @@ function ArchiTotem_Command(cmd)
         ArchiTotem_Print(L["/at set <earth/fire/water/air> # - Sets the totems shown of that element to #."])
         ArchiTotem_Print(L["/at direction <up/down> - Set the direction totems pop up."])
         ArchiTotem_Print(L
-        ["/at order <element 1, element 2, element 3, element 4> - Sets the order of the totems, from left to right."])
+            ["/at order <element 1, element 2, element 3, element 4> - Sets the order of the totems, from left to right."])
         ArchiTotem_Print(L["/at scale # - Sets the scale of ArchiTotem, default is 1."])
         ArchiTotem_Print(L["/at showall - Toggles show all mode, displaying all totems on mouseover."])
         ArchiTotem_Print(L["/at bottomcast - Toggles moving totems to the bottom line when cast"])
