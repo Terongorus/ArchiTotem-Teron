@@ -15,22 +15,34 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set tag name
+        id: tag
+        run: |
+          tag=$(basename "${{ github.ref }}")
+          echo "tag=$tag" >> $GITHUB_OUTPUT
+
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          tag="${{ steps.tag.outputs.tag }}"
+          gh release create "$tag" --draft --title "$tag" --generate-notes
+
+  publish:
+    name: Publish Release
+    needs: [release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh release edit "${{ needs.release.outputs.tag }}" --draft=false
+
+      - uses: eregon/keep-last-n-releases@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: false
-          prerelease: false
-      - name: Upload ArchiTotem.zip
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: release/ArchiTotem.zip
-          asset_name: ArchiTotem.zip
-          asset_content_type: application/zip
+          n: 3
+          remove_tags_without_release: true
