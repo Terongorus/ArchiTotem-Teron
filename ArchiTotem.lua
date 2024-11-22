@@ -308,14 +308,12 @@ function ArchiTotem_OnLoad()
 end
 
 function ArchiTotem_UpdateCooldown(Buttonname, duration)
-    if ArchiTotem_Options["Debug"] then ArchiTotem_Print("+++++" .. Buttonname .. "+++++", "debug") end
     local cooldown = _G[Buttonname .. "Cooldown"]
     if cooldown ~= nil then
         local start = GetTime()
         if duration == 0 then duration = 1.5 end
         local enable = 1
         CooldownFrame_SetTimer(cooldown, start, duration, enable)
-        if ArchiTotem_Options["Debug"] then ArchiTotem_Print(start .. "-" .. duration .. "-" .. enable) end
     else
         if ArchiTotem_Options["Debug"] then ArchiTotem_Print("+++++" .. Buttonname .. " NOT FOUND") end
     end
