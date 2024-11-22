@@ -414,7 +414,7 @@ end
 function ArchiTotem_GetSpellId(spell)
     local localizeSpell = L[spell]
     local spellID = 0
-    for id = 1, 180 do
+    for id = 1, 200 do
         local spellName = GetSpellName(id, BOOKTYPE_SPELL)
         if spellName and string.find(spellName, localizeSpell) then
             spellID = id
