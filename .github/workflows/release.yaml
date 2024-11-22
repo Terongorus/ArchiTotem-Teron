@@ -6,7 +6,7 @@ on:
 
 jobs:
   release:
-    name: Create GitHub Release
+    name: Create Release
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
@@ -17,9 +17,7 @@ jobs:
 
       - name: Set tag name
         id: tag
-        run: |
-          tag=$(basename "${{ github.ref }}")
-          echo "tag=$tag" >> $GITHUB_OUTPUT
+        run: echo "tag=${{  github.ref_name }}" >> $GITHUB_OUTPUT
 
       - name: Create Release
         env:
@@ -27,7 +25,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: |
           tag="${{ steps.tag.outputs.tag }}"
-          gh release create "$tag" --draft --title "$tag" --generate-notes
+          gh release create "$tag" --draft --title "ArchiTotem TWoW $tag" --generate-notes
 
   publish:
     name: Publish Release
