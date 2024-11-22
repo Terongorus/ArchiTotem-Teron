@@ -1,8 +1,10 @@
 1.5 -> 1.6
 by Durotavich
 - Removed Mana Tide Totem (Turtle WoW Patch v1.17.2)
+- When Totemic Recall is casted, removed the duration indicator of the totems
 - Fixed totems tooltips
 - Removed unused locales
+- Improved ToC
 - Code cleanup
 
 1.4 -> 1.5
