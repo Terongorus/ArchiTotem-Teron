@@ -403,7 +403,6 @@ function ArchiTotem_OnEnter()
         end
     end
 
-    -- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     if ArchiTotem_Options["Apperance"].showtooltips == true then
         local tooltipspellID = ArchiTotem_GetSpellId(ArchiTotem_TotemData[this:GetName()].name)
         if tooltipspellID > 0 then
@@ -412,7 +411,6 @@ function ArchiTotem_OnEnter()
             GameTooltip:SetSpell(tooltipspellID, SpellBookFrame.bookType)
         end
     end
-    -- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 end
 
 function ArchiTotem_GetSpellId(spell)
@@ -476,7 +474,12 @@ function ArchiTotem_CastTotem()
     local localizeSpell = L[ArchiTotem_TotemData[this:GetName()].name]
     CastSpellByName(localizeSpell)
     if localizeSpell == "Totemic Recall" then
-        ArchiTotem_ClearAllCooldowns()
+        for k, v in ArchiTotemActiveTotem do
+            if k ~= nil and k ~= "Totemic" then
+                _G[k .. "DurationText"]:Hide()
+            end
+        end
+        ArchiTotemActiveTotem = {}
     end
     -- If control or alt isn't pressed, cast the totem
 end
