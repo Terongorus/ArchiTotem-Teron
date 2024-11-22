@@ -15,32 +15,37 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set tag name
-        id: tag
-        run: echo "tag=${{  github.ref_name }}" >> $GITHUB_OUTPUT
-
-      - name: Create Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
+      - name: GitHub Tag Name example
         run: |
-          tag="${{ steps.tag.outputs.tag }}"
-          gh release create "$tag" --draft --title "ArchiTotem TWoW $tag" --generate-notes
+          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
 
-  publish:
-    name: Publish Release
-    needs: [release]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Publish Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-        run: gh release edit "${{ needs.release.outputs.tag }}" --draft=false
+  #     - name: Set tag name
+  #       id: tag
+  #       run: echo "tag=${{  github.ref_name }}" >> $GITHUB_OUTPUT
 
-      - uses: eregon/keep-last-n-releases@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          n: 3
-          remove_tags_without_release: true
+  #     - name: Create Release
+  #       env:
+  #         GH_TOKEN: ${{ github.token }}
+  #         GH_REPO: ${{ github.repository }}
+  #       run: |
+  #         tag="${{ steps.tag.outputs.tag }}"
+  #         gh release create "$tag" --draft --title "ArchiTotem TWoW $tag" --generate-notes
+
+  # publish:
+  #   name: Publish Release
+  #   needs: [release]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Publish Release
+  #       env:
+  #         GH_TOKEN: ${{ github.token }}
+  #         GH_REPO: ${{ github.repository }}
+  #       run: gh release edit "${{ needs.release.outputs.tag }}" --draft=false
+
+  #     - uses: eregon/keep-last-n-releases@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         n: 3
+  #         remove_tags_without_release: true
