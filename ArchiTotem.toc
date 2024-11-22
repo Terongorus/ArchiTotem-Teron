@@ -1,9 +1,9 @@
 ## Interface: 11200
-## Title: ArchiTotem
-## Notes: All totems on 4 barslots!
-## Notes-ruRU: Все тотемы в 4 ячейках!
-## Version: 1.5
+## Title: ArchiTotem |cff007fff [TurtleWoW]|r
+## Notes: All totems on 4 barslots. TurtleWoW Edition!
+## Version: 1.7
 ## Author: Nahoom of Dragonblight EU
+## Maintainer: Durotavich of Nordanaar TurtleWoW
 ## X-Credits: RoadBlock, Lichery - localizations
 ## SavedVariablesPerCharacter: ArchiTotem_TotemData, ArchiTotem_Options
 
