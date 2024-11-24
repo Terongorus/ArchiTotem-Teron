@@ -292,6 +292,7 @@ function ArchiTotem_OnLoad()
             _G[popout]:SetScript("OnDragStop", ArchiTotem_Noop)
         end
         this:RegisterEvent("VARIABLES_LOADED")
+        this:RegisterEvent("CHAT_MSG_SPELL_SELF_BUFF")
         this:RegisterEvent("SPELLCAST_STOP")
         this:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
         this:RegisterEvent("CHAT_MSG_SPELL_FAILED_LOCALPLAYER")
@@ -319,7 +320,38 @@ function ArchiTotem_UpdateCooldown(Buttonname, duration)
     end
 end
 
-function ArchiTotem_OnEvent(event)
+function ArchiTotem_ActiveTotem()
+    ArchiTotemActiveTotem[ArchiTotemCastedElement] = ArchiTotemCastedTotem
+    ArchiTotemActiveTotem[ArchiTotemCastedElement].casted = GetTime()
+    ArchiTotem_TotemData[ArchiTotemCastedButton].cooldownstarted = GetTime()
+
+    ArchiTotem_UpdateAllCooldowns()
+
+    if ArchiTotem_Options["Apperance"].bottomoncast == true then
+        local buttonNumber = tonumber(string.sub(ArchiTotemCastedButton, -1, -1))
+        if buttonNumber > 1 then
+            local topbutton, bottombutton
+            for i = buttonNumber, 2, -1 do
+                -- For all buttons of that element
+                topbutton = string.sub(ArchiTotemCastedButton, 1, -2) .. i
+                bottombutton = string.sub(ArchiTotemCastedButton, 1, -2) .. (i - 1)
+                ArchiTotem_Switch(topbutton, bottombutton)
+                if ArchiTotem_TotemData[topbutton].cooldownstarted == nil then
+                    local duration = 1.5
+                    CooldownFrame_SetTimer(_G[topbutton .. "Cooldown"], GetTime(), duration, 1)
+                end
+            end
+            local duration = ArchiTotem_TotemData[bottombutton].cooldown
+            if duration == 0 then duration = 1.5 end
+            CooldownFrame_SetTimer(_G[bottombutton .. "Cooldown"], GetTime(), duration, 1)
+        end
+    end
+    ArchiTotemCasted = nil
+    ArchiTotemCastedTotem = nil
+    ArchiTotemCastedButton = nil
+end
+
+function ArchiTotem_OnEvent(event, arg1)
     if event == "VARIABLES_LOADED" then
         ArchiTotem_ClearAllCooldowns()
         ArchiTotem_UpdateTextures()
@@ -332,34 +364,30 @@ function ArchiTotem_OnEvent(event)
         ArchiTotemCasted = 0
     elseif event == "SPELLCAST_STOP" then
         if ArchiTotemCasted == 1 then
-            ArchiTotemActiveTotem[ArchiTotemCastedElement] = ArchiTotemCastedTotem
-            ArchiTotemActiveTotem[ArchiTotemCastedElement].casted = GetTime()
-            ArchiTotem_TotemData[ArchiTotemCastedButton].cooldownstarted = GetTime()
-
-            ArchiTotem_UpdateAllCooldowns(ArchiTotemCastedButton)
-
-            if ArchiTotem_Options["Apperance"].bottomoncast == true then
-                local buttonNumber = tonumber(string.sub(ArchiTotemCastedButton, -1, -1))
-                if buttonNumber > 1 then
-                    local topbutton, bottombutton
-                    for i = buttonNumber, 2, -1 do
-                        -- For all buttons of that element
-                        topbutton = string.sub(ArchiTotemCastedButton, 1, -2) .. i
-                        bottombutton = string.sub(ArchiTotemCastedButton, 1, -2) .. (i - 1)
-                        ArchiTotem_Switch(topbutton, bottombutton)
-                        if ArchiTotem_TotemData[topbutton].cooldownstarted == nil then
-                            local duration = 1.5
-                            CooldownFrame_SetTimer(_G[topbutton .. "Cooldown"], GetTime(), duration, 1)
-                        end
-                    end
-                    local duration = ArchiTotem_TotemData[bottombutton].cooldown
-                    if duration == 0 then duration = 1.5 end
-                    CooldownFrame_SetTimer(_G[bottombutton .. "Cooldown"], GetTime(), duration, 1)
+            ArchiTotem_ActiveTotem()
+        end
+    elseif event == "CHAT_MSG_SPELL_SELF_BUFF" then
+        local _, _, castedTotem, _ = string.find(arg1, "You cast (.*) Totem.")
+        local _, _, totemicRecall, _ = string.find(arg1, "from (%w+) Recall.")
+        if castedTotem ~= nil then
+            local totemCastedName = castedTotem .. " Totem"
+            for totem in ArchiTotem_TotemData do
+                if totemCastedName == ArchiTotem_TotemData[totem].name then
+                    ArchiTotemCasted = 1
+                    ArchiTotemCastedTotem = ArchiTotem_TotemData[totem]
+                    ArchiTotemCastedElement = string.sub(totem, 18, -2)
+                    ArchiTotemCastedButton = totem
+                    ArchiTotem_ActiveTotem()
                 end
             end
-            ArchiTotemCasted = nil
-            ArchiTotemCastedTotem = nil
-            ArchiTotemCastedButton = nil
+        end
+        if totemicRecall ~= nil then
+            for k, v in ArchiTotemActiveTotem do
+                if k ~= nil and k ~= "Totemic" then
+                    _G[k .. "DurationText"]:Hide()
+                end
+            end
+            ArchiTotemActiveTotem = {}
         end
     end
 end
