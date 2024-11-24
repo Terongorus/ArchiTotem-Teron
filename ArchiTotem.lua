@@ -296,6 +296,7 @@ function ArchiTotem_OnLoad()
         this:RegisterEvent("SPELLCAST_STOP")
         this:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
         this:RegisterEvent("CHAT_MSG_SPELL_FAILED_LOCALPLAYER")
+        this:RegisterEvent("PLAYER_AURAS_CHANGED")
         SLASH_ARCHITOTEM1 = "/architotem"
         SLASH_ARCHITOTEM2 = "/at"
         -- A shortcut or alias
@@ -382,12 +383,57 @@ function ArchiTotem_OnEvent(event, arg1)
             end
         end
         if totemicRecall ~= nil then
-            for k, v in ArchiTotemActiveTotem do
+            for k, _ in ArchiTotemActiveTotem do
                 if k ~= nil and k ~= "Totemic" then
                     _G[k .. "DurationText"]:Hide()
                 end
             end
             ArchiTotemActiveTotem = {}
+        end
+    elseif (event == "PLAYER_AURAS_CHANGED") then
+        local outOfRange = true
+        for i = 0, 31 do
+            local buffId, _ = GetPlayerBuff(i, "HELPFUL|HARMFUL|PASSIVE")
+            if (buffId >= 0) then
+                local texture = GetPlayerBuffTexture(buffId)
+                for _, v in pairs(ArchiTotemActiveTotem) do
+                    if texture == v.icon then
+                        -- The player is in range of this totem's effect
+                        outOfRange = false
+                        break
+                    end
+                end
+            else
+                break
+            end
+        end
+        if outOfRange and next(ArchiTotemActiveTotem) ~= nil then
+            for k, v in ArchiTotemActiveTotem do
+                if k ~= nil then
+                    for key, data in pairs(ArchiTotem_TotemData) do
+                        if data.name == v.name then
+                            local buttonKey = key
+                            _G[buttonKey .. "Texture"]:SetDesaturated(outOfRange)
+                            local redColor = "|cFFff0000"
+                            UIErrorsFrame:AddMessage(redColor .. v.name .. " is out of range!", 1, 0, 0)
+                            PlaySound("RaidWarning")
+                            break
+                        end
+                    end
+                end
+            end
+        else
+            for k, v in ArchiTotemActiveTotem do
+                if k ~= nil then
+                    for key, data in pairs(ArchiTotem_TotemData) do
+                        if data.name == v.name then
+                            local buttonKey = key
+                            _G[buttonKey .. "Texture"]:SetDesaturated(outOfRange)
+                            break
+                        end
+                    end
+                end
+            end
         end
     end
 end
@@ -405,7 +451,7 @@ end
 function ArchiTotem_OnEnter()
     -- When entering a button, show all totems of that element
     if ArchiTotem_Options["Apperance"].allonmouseover == true then
-        for k, v in totemElements do
+        for _, v in totemElements do
             -- For all the elements
             local threeLetterElement = string.sub(v, 1, 3)
             -- Get the 3 first letters of the element
@@ -835,7 +881,7 @@ function ArchiTotem_Command(cmd)
                 _G[k .. "CooldownBg"]:Hide()
                 v.cooldownstarted = nil
             end
-            for k, v in ArchiTotemActiveTotem do
+            for k, _ in ArchiTotemActiveTotem do
                 _G[k .. "DurationText"]:Hide()
             end
         end
