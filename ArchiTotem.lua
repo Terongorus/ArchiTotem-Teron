@@ -391,7 +391,7 @@ function ArchiTotem_OnEvent(event, arg1)
             ArchiTotemActiveTotem = {}
         end
     elseif event == "PLAYER_AURAS_CHANGED" then
-        local outOfRange = true
+        local outOfRange = {}
         local playerBuffs = {}
 
         -- Gather active player buff textures
@@ -407,23 +407,21 @@ function ArchiTotem_OnEvent(event, arg1)
 
         -- Check if any active totem matches a player buff
         for _, totem in pairs(ArchiTotemActiveTotem) do
+            outOfRange[totem.name] = true
             if playerBuffs[totem.icon] then
-                outOfRange = false
-                break
+                outOfRange[totem.name] = false
+                -- break
             end
         end
 
         -- Process each active totem
-        for _, totem in pairs(ArchiTotemActiveTotem) do
+        for k, totem in pairs(ArchiTotemActiveTotem) do
             for buttonKey, data in pairs(ArchiTotem_TotemData) do
-                if data.name == totem.name then
-                    local buttonTexture = _G[buttonKey .. "Texture"]
-                    buttonTexture:SetDesaturated(outOfRange)
-
-                    if outOfRange then
-                        local redColor = "|cFFFF0000"
-                        UIErrorsFrame:AddMessage(redColor .. totem.name .. " is out of range!", 1, 0, 0)
-                        PlaySound("RaidWarning")
+                if k ~= nil and data.name == totem.name then
+                    if outOfRange[totem.name] then
+                        _G[k .. "DurationText"]:SetTextColor(1, 0, 0)
+                    else
+                        _G[k .. "DurationText"]:SetTextColor(1, 1, 1)
                     end
                     break
                 end
