@@ -67,7 +67,7 @@ if not ArchiTotem_Options then
             max = 1,
             shown = 1
         },
-        Apperance = {
+        Appearance = {
             direction = "up",
             scale = 1,
             allonmouseover = false,
@@ -306,7 +306,6 @@ function ArchiTotem_Print(msg, type)
 end
 
 function ArchiTotem_Noop()
-    return
 end
 
 function ArchiTotem_OnLoad()
@@ -369,7 +368,7 @@ function ArchiTotem_ActiveTotem()
     ArchiTotem_UpdateAllCooldowns()
 
     -- Handle bottom-on-cast appearance option
-    if ArchiTotem_Options["Apperance"].bottomoncast then
+    if ArchiTotem_Options["Appearance"].bottomoncast then
         local buttonNumber = tonumber(string.sub(ArchiTotemCastedButton, -1))
 
         if buttonNumber > 1 then
@@ -407,8 +406,8 @@ function ArchiTotem_OnEvent(event, arg1)
         ArchiTotem_ClearAllCooldowns()
         ArchiTotem_UpdateTextures()
         ArchiTotem_UpdateShown()
-        ArchiTotem_SetDirection(ArchiTotem_Options["Apperance"].direction)
-        ArchiTotem_SetScale(ArchiTotem_Options["Apperance"].scale)
+        ArchiTotem_SetDirection(ArchiTotem_Options["Appearance"].direction)
+        ArchiTotem_SetScale(ArchiTotem_Options["Appearance"].scale)
         ArchiTotem_Order(ArchiTotem_Options["Order"].first, ArchiTotem_Options["Order"].second,
             ArchiTotem_Options["Order"].third, ArchiTotem_Options["Order"].forth)
     elseif event == "CHAT_MSG_SPELL_FAILED_LOCALPLAYER" then
@@ -492,7 +491,7 @@ end
 
 function ArchiTotem_OnEnter()
     -- When entering a button, show all totems of that element
-    if ArchiTotem_Options["Apperance"].allonmouseover == true then
+    if ArchiTotem_Options["Appearance"].allonmouseover == true then
         for _, v in totemElements do
             -- For all the elements
             local threeLetterElement = string.sub(v, 1, 3)
@@ -512,12 +511,11 @@ function ArchiTotem_OnEnter()
             local button = _G[totemElement .. i]
             if button then
                 button:Show()
-                -- Show
             end
         end
     end
 
-    if ArchiTotem_Options["Apperance"].showtooltips == true then
+    if ArchiTotem_Options["Appearance"].showtooltips == true then
         local tooltipspellID = ArchiTotem_GetSpellId(ArchiTotem_TotemData[this:GetName()].name)
         if tooltipspellID > 0 then
             local spellName = GetSpellName(tooltipspellID, BOOKTYPE_SPELL)
@@ -671,7 +669,7 @@ end
 
 function ArchiTotem_SetDirection(dir)
     -- Set the direction totems pop up when hovering, up or down
-    ArchiTotem_Options["Apperance"].direction = dir
+    ArchiTotem_Options["Appearance"].direction = dir
     -- Save the direction
     local anchor1, anchor2
     if dir == "down" then
@@ -751,7 +749,7 @@ end
 
 function ArchiTotem_SetScale(scale)
     -- Sets the scale of the entire ArchiTotem frame
-    ArchiTotem_Options["Apperance"].scale = scale
+    ArchiTotem_Options["Appearance"].scale = scale
     -- Save the scale
     for k, v in totemElements do
         -- For all the elements
@@ -795,7 +793,7 @@ function ArchiTotem_OnUpdate(arg1)
         end
         for k, v in ArchiTotem_TotemData do
             -- Handles the cooldowns of all totems
-            if ArchiTotem_Options["Apperance"].shownumericcooldowns == true then
+            if ArchiTotem_Options["Appearance"].shownumericcooldowns == true then
                 if v.cooldownstarted == nil then
                 else
                     if GetTime() > (v.cooldownstarted + v.cooldown) then
