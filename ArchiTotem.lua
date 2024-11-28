@@ -95,35 +95,40 @@ if not ArchiTotem_TotemData then
             icon = "Interface\\Icons\\Spell_Nature_StrengthOfEarthTotem02",
             name = "Earthbind Totem",
             duration = 45,
-            cooldown = 15
+            cooldown = 15,
+            buff = false
         },
         {
             button = "ArchiTotemButton_Earth2",
             icon = "Interface\\Icons\\Spell_Nature_TremorTotem",
             name = "Tremor Totem",
             duration = 120,
-            cooldown = 0
+            cooldown = 0,
+            buff = false
         },
         {
             button = "ArchiTotemButton_Earth3",
             icon = "Interface\\Icons\\Spell_Nature_EarthBindTotem",
             name = "Strength of Earth Totem",
             duration = 120,
-            cooldown = 0
+            cooldown = 0,
+            buff = true
         },
         {
             button = "ArchiTotemButton_Earth4",
             icon = "Interface\\Icons\\Spell_Nature_StoneSkinTotem",
             name = "Stoneskin Totem",
             duration = 120,
-            cooldown = 0
+            cooldown = 0,
+            buff = true
         },
         {
             button = "ArchiTotemButton_Earth5",
             icon = "Interface\\Icons\\Spell_Nature_StoneClawTotem",
             name = "Stoneclaw Totem",
             duration = 15,
-            cooldown = 30
+            cooldown = 30,
+            buff = false
         }
     }
 
@@ -133,35 +138,40 @@ if not ArchiTotem_TotemData then
             icon = "Interface\\Icons\\Spell_Fire_SearingTotem",
             name = "Searing Totem",
             duration = 55,
-            cooldown = 0
+            cooldown = 0,
+            buff = false
         },
         {
             button = "ArchiTotemButton_Fire2",
             icon = "Interface\\Icons\\Spell_Fire_SealOfFire",
             name = "Fire Nova Totem",
             duration = 5,
-            cooldown = 15
+            cooldown = 15,
+            buff = false
         },
         {
             button = "ArchiTotemButton_Fire3",
             icon = "Interface\\Icons\\Spell_Fire_SelfDestruct",
             name = "Magma Totem",
             duration = 20,
-            cooldown = 0
+            cooldown = 0,
+            buff = false
         },
         {
             button = "ArchiTotemButton_Fire4",
             icon = "Interface\\Icons\\Spell_FrostResistanceTotem_01",
             name = "Frost Resistance Totem",
             duration = 120,
-            cooldown = 0
+            cooldown = 0,
+            buff = true
         },
         {
             button = "ArchiTotemButton_Fire5",
             icon = "Interface\\Icons\\Spell_Nature_GuardianWard",
             name = "Flametongue Totem",
             duration = 120,
-            cooldown = 0
+            cooldown = 0,
+            buff = true
         }
     }
 
@@ -171,35 +181,40 @@ if not ArchiTotem_TotemData then
             icon = "Interface\\Icons\\Spell_Nature_ManaRegenTotem",
             name = "Mana Spring Totem",
             duration = 60,
-            cooldown = 0
+            cooldown = 0,
+            buff = true
         },
         {
             button = "ArchiTotemButton_Water2",
             icon = "Interface\\Icons\\Spell_FireResistanceTotem_01",
             name = "Fire Resistance Totem",
             duration = 120,
-            cooldown = 0
+            cooldown = 0,
+            buff = true
         },
         {
             button = "ArchiTotemButton_Water3",
             icon = "Interface\\Icons\\Spell_Nature_PoisonCleansingTotem",
             name = "Poison Cleansing Totem",
             duration = 120,
-            cooldown = 0
+            cooldown = 0,
+            buff = false
         },
         {
             button = "ArchiTotemButton_Water4",
             icon = "Interface\\Icons\\Spell_Nature_DiseaseCleansingTotem",
             name = "Disease Cleansing Totem",
             duration = 120,
-            cooldown = 0
+            cooldown = 0,
+            buff = false
         },
         {
             button = "ArchiTotemButton_Water5",
             icon = "Interface\\Icons\\INV_Spear_04",
             name = "Healing Stream Totem",
             duration = 60,
-            cooldown = 0
+            cooldown = 0,
+            buff = true
         }
     }
 
@@ -209,49 +224,56 @@ if not ArchiTotem_TotemData then
             icon = "Interface\\Icons\\Spell_Nature_Brilliance",
             name = "Tranquil Air Totem",
             duration = 120,
-            cooldown = 0
+            cooldown = 0,
+            buff = true
         },
         {
             button = "ArchiTotemButton_Air2",
             icon = "Interface\\Icons\\Spell_Nature_GroundingTotem",
             name = "Grounding Totem",
             duration = 45,
-            cooldown = 15
+            cooldown = 15,
+            buff = true
         },
         {
             button = "ArchiTotemButton_Air3",
             icon = "Interface\\Icons\\Spell_Nature_Windfury",
             name = "Windfury Totem",
             duration = 120,
-            cooldown = 0
+            cooldown = 0,
+            buff = true
         },
         {
             button = "ArchiTotemButton_Air4",
             icon = "Interface\\Icons\\Spell_Nature_InvisibilityTotem",
             name = "Grace of Air Totem",
             duration = 120,
-            cooldown = 0
+            cooldown = 0,
+            buff = true
         },
         {
             button = "ArchiTotemButton_Air5",
             icon = "Interface\\Icons\\Spell_Nature_NatureResistanceTotem",
             name = "Nature Resistance Totem",
             duration = 120,
-            cooldown = 0
+            cooldown = 0,
+            buff = true
         },
         {
             button = "ArchiTotemButton_Air6",
             icon = "Interface\\Icons\\Spell_Nature_EarthBind",
             name = "Windwall Totem",
             duration = 120,
-            cooldown = 0
+            cooldown = 0,
+            buff = true
         },
         {
             button = "ArchiTotemButton_Air7",
             icon = "Interface\\Icons\\Spell_Nature_RemoveCurse",
             name = "Sentry Totem",
             duration = 300,
-            cooldown = 0
+            cooldown = 0,
+            buff = true
         }
     }
 
@@ -261,19 +283,21 @@ if not ArchiTotem_TotemData then
             icon = "Interface\\Icons\\Spell_Shaman_TotemRecall",
             name = "Totemic Recall",
             duration = 0,
-            cooldown = 6
+            cooldown = 6,
+            buff = false
         }
     }
 
 
-    local function addTotemData(button, icon, name, duration, cooldown)
+    local function addTotemData(button, icon, name, duration, cooldown, buff)
         ArchiTotem_TotemData[button] = {
             icon = icon,
             name = name,
             duration = duration,
             cooldown = cooldown,
             cooldownstarted = nil,
-            casted = nil
+            casted = nil,
+            buff = buff
         }
     end
 
@@ -289,7 +313,7 @@ if not ArchiTotem_TotemData then
     -- Iterate over all totems and add their data
     for _, totemGroup in ipairs(allTotems) do
         for _, totem in ipairs(totemGroup.data) do
-            addTotemData(totem.button, totem.icon, totem.name, totem.duration, totem.cooldown)
+            addTotemData(totem.button, totem.icon, totem.name, totem.duration, totem.cooldown, totem.buff)
         end
     end
 end
@@ -445,7 +469,7 @@ function ArchiTotem_OnEvent(event, arg1)
 
         -- Gather active player buff textures
         for i = 0, 31 do
-            local buffId = GetPlayerBuff(i, "HELPFUL|HARMFUL|PASSIVE")
+            local buffId, _ = GetPlayerBuff(i, "HELPFUL|HARMFUL|PASSIVE")
             if buffId >= 0 then
                 local texture = GetPlayerBuffTexture(buffId)
                 playerBuffs[texture] = true
@@ -456,18 +480,18 @@ function ArchiTotem_OnEvent(event, arg1)
 
         -- Check if any active totem matches a player buff
         for _, totem in pairs(ArchiTotemActiveTotem) do
-            outOfRange[totem.name] = true
             if playerBuffs[totem.icon] then
                 outOfRange[totem.name] = false
-                -- break
+            else
+                outOfRange[totem.name] = true
             end
         end
 
         -- Process each active totem
         for k, totem in pairs(ArchiTotemActiveTotem) do
-            for buttonKey, data in pairs(ArchiTotem_TotemData) do
+            for _, data in pairs(ArchiTotem_TotemData) do
                 if k ~= nil and data.name == totem.name then
-                    if outOfRange[totem.name] then
+                    if outOfRange[totem.name] and totem.buff then
                         _G[k .. "DurationText"]:SetTextColor(1, 0, 0)
                     else
                         _G[k .. "DurationText"]:SetTextColor(1, 1, 1)
