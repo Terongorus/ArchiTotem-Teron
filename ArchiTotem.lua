@@ -639,22 +639,34 @@ function ArchiTotem_CastTotem()
 end
 
 function ArchiTotem_Switch(arg1, arg2)
-    -- Switch the data of two totems, then update the textures
-    local temp = ArchiTotem_TotemData[arg1]
-    ArchiTotem_TotemData[arg1] = ArchiTotem_TotemData[arg2]
-    ArchiTotem_TotemData[arg2] = temp
-    _G[arg1 .. "CooldownText"]:Hide()
-    _G[arg1 .. "CooldownBg"]:Hide()
-    _G[arg2 .. "CooldownText"]:Hide()
-    _G[arg2 .. "CooldownBg"]:Hide()
-    if ArchiTotem_GetSpellId(ArchiTotem_TotemData[arg1].name) ~= 0 then
-        local _, duration1 = GetSpellCooldown(ArchiTotem_GetSpellId(ArchiTotem_TotemData[arg1].name), BOOKTYPE_SPELL)
-        CooldownFrame_SetTimer(_G[arg1 .. "Cooldown"], ArchiTotem_TotemData[arg1].casted, duration1, 1)
+    -- Swap the data of two totems and update their textures and cooldowns
+    -- Swap the totem data
+    ArchiTotem_TotemData[arg1], ArchiTotem_TotemData[arg2] =
+        ArchiTotem_TotemData[arg2], ArchiTotem_TotemData[arg1]
+
+    -- Hide cooldown text and background for both totems
+    for _, arg in ipairs({ arg1, arg2 }) do
+        local cooldownText = _G[arg .. "CooldownText"]
+        local cooldownBg = _G[arg .. "CooldownBg"]
+        if cooldownText then cooldownText:Hide() end
+        if cooldownBg then cooldownBg:Hide() end
     end
-    if ArchiTotem_GetSpellId(ArchiTotem_TotemData[arg2].name) ~= 0 then
-        local _, duration2 = GetSpellCooldown(ArchiTotem_GetSpellId(ArchiTotem_TotemData[arg2].name), BOOKTYPE_SPELL)
-        CooldownFrame_SetTimer(_G[arg2 .. "Cooldown"], ArchiTotem_TotemData[arg2].casted, duration2, 1)
+
+    -- Update cooldown frames for each totem
+    for _, arg in ipairs({ arg1, arg2 }) do
+        local totemData = ArchiTotem_TotemData[arg]
+        local spellID = ArchiTotem_GetSpellId(totemData.name)
+
+        if spellID and spellID ~= 0 then
+            local _, duration = GetSpellCooldown(spellID, BOOKTYPE_SPELL)
+            local cooldownFrame = _G[arg .. "Cooldown"]
+            if cooldownFrame then
+                CooldownFrame_SetTimer(cooldownFrame, totemData.casted, duration, 1)
+            end
+        end
     end
+
+    -- Refresh totem textures
     ArchiTotem_UpdateTextures()
 end
 
@@ -710,83 +722,91 @@ function ArchiTotem_UpdateAllCooldowns()
 end
 
 function ArchiTotem_SetDirection(dir)
-    -- Set the direction totems pop up when hovering, up or down
+    -- Set the direction for totems to pop up when hovering
     ArchiTotem_Options["Appearance"].direction = dir
-    -- Save the direction
-    local anchor1, anchor2
+
+    -- Define anchor points and duration text offsets
+    local anchor1, anchor2, offset
     if dir == "down" then
-        anchor1 = "TOPLEFT"
-        anchor2 = "BOTTOMLEFT"
-        EarthDurationText:SetPoint("CENTER", ArchiTotemButton_Earth1, "CENTER", 0, 26)
-        FireDurationText:SetPoint("CENTER", ArchiTotemButton_Fire1, "CENTER", 0, 26)
-        WaterDurationText:SetPoint("CENTER", ArchiTotemButton_Water1, "CENTER", 0, 26)
-        AirDurationText:SetPoint("CENTER", ArchiTotemButton_Air1, "CENTER", 0, 26)
+        anchor1, anchor2, offset = "TOPLEFT", "BOTTOMLEFT", 26
     elseif dir == "up" then
-        anchor1 = "BOTTOMLEFT"
-        anchor2 = "TOPLEFT"
-        EarthDurationText:SetPoint("CENTER", ArchiTotemButton_Earth1, "CENTER", 0, -26)
-        FireDurationText:SetPoint("CENTER", ArchiTotemButton_Fire1, "CENTER", 0, -26)
-        WaterDurationText:SetPoint("CENTER", ArchiTotemButton_Water1, "CENTER", 0, -26)
-        AirDurationText:SetPoint("CENTER", ArchiTotemButton_Air1, "CENTER", 0, -26)
+        anchor1, anchor2, offset = "BOTTOMLEFT", "TOPLEFT", -26
+    else
+        print("Error: Invalid direction. Must be 'up' or 'down'.")
+        return
     end
-    for k, v in totemElements do
-        -- For all the elements
-        local threeLetterElement = string.sub(v, 1, 3)
-        -- Get the 3 first letters of the element
-        for i = 2, ArchiTotem_Options[threeLetterElement].max do
-            -- For all buttons of that element
-            local relativeTotem = _G["ArchiTotemButton_" .. v .. (i - 1)]
-            -- The totem to be anchored to
-            _G["ArchiTotemButton_" .. v .. i]:ClearAllPoints()
-            -- Clear all anchors, or the buttons will be messed up
-            _G["ArchiTotemButton_" .. v .. i]:SetPoint(anchor1, relativeTotem, anchor2)
-            -- Set the anchor
+
+    -- Update duration text positions
+    local durationTexts = {
+        EarthDurationText = ArchiTotemButton_Earth1,
+        FireDurationText = ArchiTotemButton_Fire1,
+        WaterDurationText = ArchiTotemButton_Water1,
+        AirDurationText = ArchiTotemButton_Air1,
+    }
+
+    for text, button in pairs(durationTexts) do
+        _G[text]:SetPoint("CENTER", button, "CENTER", 0, offset)
+    end
+
+    -- Adjust the anchor points for all totem buttons
+    for _, element in ipairs(totemElements) do
+        local elementKey = string.sub(element, 1, 3) -- Get the 3-letter element key
+        local maxButtons = ArchiTotem_Options[elementKey].max
+
+        for i = 2, maxButtons do
+            local currentButton = _G["ArchiTotemButton_" .. element .. i]
+            local previousButton = _G["ArchiTotemButton_" .. element .. (i - 1)]
+            if currentButton and previousButton then
+                currentButton:ClearAllPoints()
+                currentButton:SetPoint(anchor1, previousButton, anchor2)
+            end
         end
     end
 end
 
 function ArchiTotem_Order(first, second, third, forth)
-    if first == nil or second == nil or third == nil or forth == nil then
-        return ArchiTotem_Print(L["Elements must be written in english!"] .. " <Earth, Fire, Water, Air>", "error")
+    -- Ensure all elements are provided
+    if not first or not second or not third or not forth then
+        return ArchiTotem_Print(L["Elements must be written in English!"] .. " <Earth, Fire, Water, Air>", "error")
     end
-    -- Set the order of the totems Earth Fire Water Air.
-    local firstButton, secondButton, thirdButton, forthButton, fifthButton
-    firstButton = "ArchiTotemButton_" .. strupper(string.sub(first, 1, 1)) .. string.sub(first, 2) .. "1"
-    secondButton = "ArchiTotemButton_" .. strupper(string.sub(second, 1, 1)) .. string.sub(second, 2) .. "1"
-    thirdButton = "ArchiTotemButton_" .. strupper(string.sub(third, 1, 1)) .. string.sub(third, 2) .. "1"
-    forthButton = "ArchiTotemButton_" .. strupper(string.sub(forth, 1, 1)) .. string.sub(forth, 2) .. "1"
-    fifthButton = "ArchiTotemButton_Totemic1"
 
-    ArchiTotem_Options["Order"].first = strupper(string.sub(first, 1, 1)) .. string.sub(first, 2)
-    ArchiTotem_Options["Order"].second = strupper(string.sub(second, 1, 1)) .. string.sub(second, 2)
-    ArchiTotem_Options["Order"].third = strupper(string.sub(third, 1, 1)) .. string.sub(third, 2)
-    ArchiTotem_Options["Order"].forth = strupper(string.sub(forth, 1, 1)) .. string.sub(forth, 2)
-    ArchiTotem_Options["Order"].fifth = "ArchiTotemButton_Totemic1"
+    -- Helper function to format the element name
+    local function formatElement(element)
+        return "ArchiTotemButton_" .. strupper(string.sub(element, 1, 1)) .. string.sub(element, 2) .. "1"
+    end
 
-    _G[firstButton]:ClearAllPoints()
-    -- Clear all anchors, or the buttons will be messed up
-    _G[firstButton]:SetPoint("CENTER", ArchiTotemFrame, "CENTER")
-    -- Set the anchor
+    -- Get button names
+    local buttons = {
+        formatElement(first),
+        formatElement(second),
+        formatElement(third),
+        formatElement(forth),
+        "ArchiTotemButton_Totemic1",
+    }
 
-    _G[secondButton]:ClearAllPoints()
-    -- Clear all anchors, or the buttons will be messed up
-    _G[secondButton]:SetPoint("BOTTOMLEFT", firstButton, "BOTTOMRIGHT")
-    -- Set the anchor
+    -- Save the order in options
+    ArchiTotem_Options["Order"] = {
+        first = strupper(string.sub(first, 1, 1)) .. string.sub(first, 2),
+        second = strupper(string.sub(second, 1, 1)) .. string.sub(second, 2),
+        third = strupper(string.sub(third, 1, 1)) .. string.sub(third, 2),
+        forth = strupper(string.sub(forth, 1, 1)) .. string.sub(forth, 2),
+        fifth = "ArchiTotemButton_Totemic1",
+    }
 
-    _G[thirdButton]:ClearAllPoints()
-    -- Clear all anchors, or the buttons will be messed up
-    _G[thirdButton]:SetPoint("BOTTOMLEFT", secondButton, "BOTTOMRIGHT")
-    -- Set the anchor
-
-    _G[forthButton]:ClearAllPoints()
-    -- Clear all anchors, or the buttons will be messed up
-    _G[forthButton]:SetPoint("BOTTOMLEFT", thirdButton, "BOTTOMRIGHT")
-    -- Set the anchor
-
-    _G[fifthButton]:ClearAllPoints()
-    -- Clear all anchors, or the buttons will be messed up
-    _G[fifthButton]:SetPoint("BOTTOMLEFT", forthButton, "BOTTOMRIGHT")
-    -- Set the anchor
+    -- Set button anchors dynamically
+    for i, button in ipairs(buttons) do
+        local currentButton = _G[button]
+        if currentButton then
+            currentButton:ClearAllPoints()
+            if i == 1 then
+                -- Anchor the first button to the center of the frame
+                currentButton:SetPoint("CENTER", ArchiTotemFrame, "CENTER")
+            else
+                -- Anchor subsequent buttons to the previous button
+                currentButton:SetPoint("BOTTOMLEFT", _G[buttons[i - 1]], "BOTTOMRIGHT")
+            end
+        end
+    end
 end
 
 function ArchiTotem_SetScale(scale)
@@ -825,8 +845,7 @@ function ArchiTotem_OnUpdate(arg1)
                 if seconds < 10 then
                     seconds = string.format("0%.0f", seconds)
                 else
-                    seconds = string.format("%.0f",
-                        seconds)
+                    seconds = string.format("%.0f", seconds)
                 end
                 if v.duration > 0 then
                     _G[k .. "DurationText"]:SetText(minutes .. ":" .. seconds)
