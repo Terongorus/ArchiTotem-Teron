@@ -596,28 +596,46 @@ function ArchiTotem_OnClick()
 end
 
 function ArchiTotem_CastTotem()
+    -- Initialize casting state and store relevant information
     ArchiTotemCasted = 1
-    ArchiTotemCastedTotem = ArchiTotem_TotemData[this:GetName()]
-    ArchiTotemCastedElement = string.sub(this:GetName(), 18, -2)
     ArchiTotemCastedButton = this:GetName()
+    ArchiTotemCastedTotem = ArchiTotem_TotemData[ArchiTotemCastedButton]
+    ArchiTotemCastedElement = string.sub(ArchiTotemCastedButton, 18, -2)
 
-    if ArchiTotemCastedTotem.casted == nil then
-        ArchiTotemCastedTotem.casted = GetTime() - ArchiTotemCastedTotem
-            .cooldown
+    if not ArchiTotemCastedTotem.casted then
+        -- Initialize the cast time if it hasn't been set
+        ArchiTotemCastedTotem.casted = GetTime() - ArchiTotemCastedTotem.cooldown
     end
-    local mincooldown = ArchiTotemCastedTotem.cooldown
-    if mincooldown < 1.5 then mincooldown = 1.5 end
-    local localizeSpell = L[ArchiTotem_TotemData[this:GetName()].name]
-    CastSpellByName(localizeSpell)
-    if localizeSpell == "Totemic Recall" then
-        for k, v in ArchiTotemActiveTotem do
-            if k ~= nil and k ~= "Totemic" then
-                _G[k .. "DurationText"]:Hide()
+
+    -- Ensure cooldown is at least 1.5 seconds
+    local cooldown = ArchiTotemCastedTotem.cooldown or 1.5
+    if cooldown < 1.5 then
+        cooldown = 1.5
+    end
+
+    -- Localize the spell name
+    local localizedSpell = L[ArchiTotemCastedTotem.name]
+    if not localizedSpell then
+        print("Error: Spell not localized")
+        return
+    end
+
+    -- Cast the totem
+    CastSpellByName(localizedSpell)
+
+    -- Handle Totemic Recall cleanup
+    if localizedSpell == "Totemic Recall" then
+        for totemName, _ in pairs(ArchiTotemActiveTotem) do
+            if totemName and totemName ~= "Totemic" then
+                local durationText = _G[totemName .. "DurationText"]
+                if durationText then
+                    durationText:Hide()
+                end
             end
         end
+        -- Clear active totems
         ArchiTotemActiveTotem = {}
     end
-    -- If control or alt isn't pressed, cast the totem
 end
 
 function ArchiTotem_Switch(arg1, arg2)
