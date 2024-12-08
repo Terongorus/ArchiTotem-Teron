@@ -350,6 +350,7 @@ function ArchiTotem_OnLoad()
         this:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
         this:RegisterEvent("CHAT_MSG_SPELL_FAILED_LOCALPLAYER")
         this:RegisterEvent("PLAYER_AURAS_CHANGED")
+        this:RegisterEvent("PLAYER_DEAD")
 
         -- Register slash commands
         SLASH_ARCHITOTEM1 = "/architotem"
@@ -357,7 +358,7 @@ function ArchiTotem_OnLoad()
         SlashCmdList["ARCHITOTEM"] = ArchiTotem_Command
 
         -- Display load message
-        DEFAULT_CHAT_FRAME:AddMessage("|CFF20B2AAArchiTotem|r " ..
+        DEFAULT_CHAT_FRAME:AddMessage("|CFF20B2AAArchiTotem|r by " ..
             author .. " " .. L["ver."] .. " " .. version .. " " .. L["loaded"] .. ".")
     else
         -- Unregister events and hide the frame if not a Shaman
@@ -488,18 +489,29 @@ function ArchiTotem_OnEvent(event, arg1)
         end
 
         -- Process each active totem
-        for k, totem in pairs(ArchiTotemActiveTotem) do
-            for _, data in pairs(ArchiTotem_TotemData) do
-                if k ~= nil and data.name == totem.name then
-                    if outOfRange[totem.name] and totem.buff then
-                        _G[k .. "DurationText"]:SetTextColor(1, 0, 0)
-                    else
-                        _G[k .. "DurationText"]:SetTextColor(1, 1, 1)
-                    end
-                    break
+        -- for k, totem in pairs(ArchiTotemActiveTotem) do
+        --     for _, data in pairs(ArchiTotem_TotemData) do
+        --         if k ~= nil and data.name == totem.name then
+        --             if outOfRange[totem.name] and totem.buff then
+        --                 _G[k .. "DurationText"]:SetTextColor(1, 0, 0)
+        --             else
+        --                 _G[k .. "DurationText"]:SetTextColor(1, 1, 1)
+        --             end
+        --             break
+        --         end
+        --     end
+        -- end
+    elseif event == "PLAYER_DEAD" then
+        for totemName, _ in pairs(ArchiTotemActiveTotem) do
+            if totemName and totemName ~= "Totemic" then
+                local durationText = _G[totemName .. "DurationText"]
+                if durationText then
+                    durationText:Hide()
                 end
             end
         end
+        -- Clear active totems
+        ArchiTotemActiveTotem = {}
     end
 end
 
@@ -540,11 +552,12 @@ function ArchiTotem_OnEnter()
     end
 
     if ArchiTotem_Options["Appearance"].showtooltips == true then
-        local tooltipspellID = ArchiTotem_GetSpellId(ArchiTotem_TotemData[this:GetName()].name)
-        if tooltipspellID > 0 then
-            local spellName = GetSpellName(tooltipspellID, BOOKTYPE_SPELL)
-            GameTooltip_SetDefaultAnchor(GameTooltip, this)
-            GameTooltip:SetSpell(tooltipspellID, SpellBookFrame.bookType)
+        if ArchiTotem_TotemData[this:GetName()] then
+            local tooltipspellID = ArchiTotem_GetSpellId(ArchiTotem_TotemData[this:GetName()].name)
+            if tooltipspellID > 0 then
+                GameTooltip_SetDefaultAnchor(GameTooltip, this)
+                GameTooltip:SetSpell(tooltipspellID, SpellBookFrame.bookType)
+            end
         end
     end
 end
