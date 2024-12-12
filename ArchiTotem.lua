@@ -489,18 +489,18 @@ function ArchiTotem_OnEvent(event, arg1)
         end
 
         -- Process each active totem
-        -- for k, totem in pairs(ArchiTotemActiveTotem) do
-        --     for _, data in pairs(ArchiTotem_TotemData) do
-        --         if k ~= nil and data.name == totem.name then
-        --             if outOfRange[totem.name] and totem.buff then
-        --                 _G[k .. "DurationText"]:SetTextColor(1, 0, 0)
-        --             else
-        --                 _G[k .. "DurationText"]:SetTextColor(1, 1, 1)
-        --             end
-        --             break
-        --         end
-        --     end
-        -- end
+        for k, totem in pairs(ArchiTotemActiveTotem) do
+            for _, data in pairs(ArchiTotem_TotemData) do
+                if k ~= nil and totem.duration > 0 and data.name == totem.name then
+                    if outOfRange[totem.name] and totem.buff then
+                        _G[k .. "DurationText"]:SetTextColor(1, 0, 0)
+                    else
+                        _G[k .. "DurationText"]:SetTextColor(1, 1, 1)
+                    end
+                    break
+                end
+            end
+        end
     elseif event == "PLAYER_DEAD" then
         for totemName, _ in pairs(ArchiTotemActiveTotem) do
             if totemName and totemName ~= "Totemic" then
