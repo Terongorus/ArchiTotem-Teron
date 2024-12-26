@@ -1,3 +1,15 @@
+1.5 -> 1.6
+by Durotavich
+- Removed Mana Tide Totem (Turtle WoW Patch v1.17.2).
+- When Totemic Recall is casted, remove the duration indicator of the totems.
+- Fixed totems tooltips due to wrong spellIDs.
+- Update ArchiTotem cooldown and duration if a totem if casted from any other source.
+- Out-of-range indicator for totems that apply an aura or effect on the player.
+- On player dead, remove cooldowns and duration.
+- Removed unused locales.
+- Improved ToC
+- Code cleanup
+
 1.4 -> 1.5
 by Durotavich
 Added Totemic Recall spell (TWoW)
@@ -18,7 +30,7 @@ There is now a grey whipe effect on the icons.
 1.1 -> 1.2
 Tooltips and the option to turn them on/off has been added.
 The option to turn timers on/off has been added.
-The addon will no longer show while on a non-shaman class. 
+The addon will no longer show while on a non-shaman class.
 
 1.0 -> 1.1
 Cooldowns and durations should now trigger correctly.
