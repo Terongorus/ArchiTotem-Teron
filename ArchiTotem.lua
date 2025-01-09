@@ -968,27 +968,27 @@ function ArchiTotem_Command(cmd)
         end
     elseif arg[1] == "showall" then
         -- /at showall, toggle showing of all totems on mouseover
-        if ArchiTotem_Options["Apperance"].allonmouseover == false then
-            ArchiTotem_Options["Apperance"].allonmouseover = true
+        if ArchiTotem_Options["Appearance"].allonmouseover == false then
+            ArchiTotem_Options["Appearance"].allonmouseover = true
             ArchiTotem_Print(L["Showing all totems on mouseover"])
         else
-            ArchiTotem_Options["Apperance"].allonmouseover = false
+            ArchiTotem_Options["Appearance"].allonmouseover = false
             ArchiTotem_Print(L["Showing only one element on mouseover"])
         end
     elseif arg[1] == "bottomcast" then
-        if ArchiTotem_Options["Apperance"].bottomoncast == false then
-            ArchiTotem_Options["Apperance"].bottomoncast = true
+        if ArchiTotem_Options["Appearance"].bottomoncast == false then
+            ArchiTotem_Options["Appearance"].bottomoncast = true
             ArchiTotem_Print(L["Totems will move the the bottom line when cast"])
         else
-            ArchiTotem_Options["Apperance"].bottomoncast = false
+            ArchiTotem_Options["Appearance"].bottomoncast = false
             ArchiTotem_Print(L["Totems will stay where they are when cast"])
         end
     elseif arg[1] == "timers" then
-        if ArchiTotem_Options["Apperance"].shownumericcooldowns == false then
-            ArchiTotem_Options["Apperance"].shownumericcooldowns = true
+        if ArchiTotem_Options["Appearance"].shownumericcooldowns == false then
+            ArchiTotem_Options["Appearance"].shownumericcooldowns = true
             ArchiTotem_Print(L["Timers are now turned on"])
         else
-            ArchiTotem_Options["Apperance"].shownumericcooldowns = false
+            ArchiTotem_Options["Appearance"].shownumericcooldowns = false
             ArchiTotem_Print(L["Timers are now turned off"])
             for k, v in ArchiTotem_TotemData do
                 _G[k .. "CooldownText"]:Hide()
@@ -1000,11 +1000,11 @@ function ArchiTotem_Command(cmd)
             end
         end
     elseif arg[1] == "tooltip" then
-        if ArchiTotem_Options["Apperance"].showtooltips == false then
-            ArchiTotem_Options["Apperance"].showtooltips = true
+        if ArchiTotem_Options["Appearance"].showtooltips == false then
+            ArchiTotem_Options["Appearance"].showtooltips = true
             ArchiTotem_Print(L["Tooltips are now turned on"])
         else
-            ArchiTotem_Options["Apperance"].showtooltips = false
+            ArchiTotem_Options["Appearance"].showtooltips = false
             ArchiTotem_Print(L["Tooltips are now turned off"])
         end
     elseif arg[1] == "debug" then
