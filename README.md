@@ -6,7 +6,7 @@
 
 Shaman addon to keep track of totems timers, area of effect and simplify the totem management.
 
-Based on https://github.com/Road-block/ArchiTotem but with some heavy refactoring, code cleanup and QoL improvements focused on [Turtle WoW](http://turtle-wow.org).
+Based on https://github.com/Road-block/ArchiTotem, and https://github.com/Bombg/pfUI-bettertotems, but with some heavy refactoring, code cleanup and QoL improvements focused on [Turtle WoW](http://turtle-wow.org).
 
 ## Features
  - All totems in a single bar.
