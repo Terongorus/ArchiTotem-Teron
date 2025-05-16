@@ -10,6 +10,7 @@ ArchiTotemCastedTotem = nil
 ArchiTotemCastedElement = nil
 ArchiTotemCastedButton = nil
 ArchiTotemActiveTotem = {}
+TeronElementCastIndex = 1
 
 local totemElements = { "Earth", "Fire", "Water", "Air", "Totemic" }
 
@@ -648,6 +649,33 @@ function ArchiTotem_CastTotem()
         end
         -- Clear active totems
         ArchiTotemActiveTotem = {}
+    end
+end
+
+function TeronCastNextElementTotem()
+    -- List of elements in order
+    local elements = { "Earth", "Fire", "Water", "Air" }
+
+    -- Get the current element to cast
+    local element = elements[TeronElementCastIndex]
+    if not element then
+        -- Reset if out of bounds
+        TeronElementCastIndex = 1
+        return
+    end
+
+    -- Get the button name for the first (selected) totem of this element
+    local buttonName = "ArchiTotemButton_" .. element .. "1"
+    local totemData = ArchiTotem_TotemData[buttonName]
+
+    if totemData and totemData.name then
+        CastSpellByName(totemData.name)
+    end
+
+    -- Move to the next element for next call
+    TeronElementCastIndex = TeronElementCastIndex + 1
+    if TeronElementCastIndex > #elements then
+        TeronElementCastIndex = 1
     end
 end
 
