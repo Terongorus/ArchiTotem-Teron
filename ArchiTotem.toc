@@ -8,5 +8,5 @@
 ## SavedVariablesPerCharacter: ArchiTotem_TotemData, ArchiTotem_Options
 
 Locale\Localization.xml
-
+ArchiTotem.lua
 ArchiTotem.xml
